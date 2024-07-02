@@ -36,6 +36,6 @@ renders tracers, the opponent(s) name, and a line to the position.
 1. Open "external esp render.py."
 2. Run the lua script.
 3. enjoy
-4. Give me a rep on V3rmillion.
+4. Give me a rep on V3rmillion: https://v3rm.net/members/randoperson0.5755/
 5. Donate to my LTC wallet: LXimp7Vm38fBbbpyTWeZG16ZrbqVu74M81
 
