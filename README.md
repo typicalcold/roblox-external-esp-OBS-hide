@@ -30,7 +30,9 @@ renders tracers, the opponent(s) name, and a line to the position.
 4. executor placed on a thumbdrive, SSD, or any solid-state storage device (this script uses read and write heavily).
 
 # installation
-1. Drag all files and folders into the workspace of the executor.
+1. downlaod as zip
+2. unzip
+3. Drag all unzipped files and folders into the workspace of the executor.
 
 # usage
 1. Open "external esp render.py" in the workspace of the executor
