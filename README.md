@@ -12,7 +12,10 @@ usage
 Some can say that this script is worse than other scripts; it is. Besides the fact that this can be hidden from recording software just by recording only the Roblox client, Many esp scripts are not able to hide esp from obs or any recording due to the fact that the esp uses PlayergGui or CoreGui to place the UI instead of a window placed above the client.
 
 # Features
-This script renders tracers, the opponent(s) name, and a line to the position.
+OBS hide
+screen record hide
+external esp
+renders tracers, the opponent(s) name, and a line to the position.
 
 # How it works
 1. The lua script checks for all players on screen, then uses WorldToScreenPoint() to convert the 3D position to the position onscreen.
