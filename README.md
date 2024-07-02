@@ -9,7 +9,7 @@ installation
 usage
 
 # Intro
-Some can say that this script is worse than other scripts; it is. Besides the fact that this can be hidden from recording software just by recording only the Roblox client, Many esp scripts are not able to hide esp from obs or any recording due to the fact that the esp uses PlayergGui or CoreGui to place the UI instead of a window placed above the client.
+Some can say that this script is worse than other scripts; it is.if you dont know what this script is for, ignore all of this, look somewhere else. This can be hidden from recording software just by recording only the Roblox window, Many esp scripts are not able to hide esp from obs or any recording due to the fact that the esp uses PlayergGui or CoreGui to place the UI instead of a window placed above the client, or the executor doesnt support OBS hide.
 
 # Features
 OBS hide
