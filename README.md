@@ -27,7 +27,7 @@ renders tracers, the opponent(s) name, and a line to the position.
 1. The newest version of Python
 2. any executor with a file system
 3. Run "pip install tkinter" into cmd.
-4. executor placed on a thumbdrive, SSD, or any solid-state storage device (this script uses read and write heavily).
+4. Decent cpu. This script may be cpu intensive and very unoptimized.
 
 # installation
 1. download  zip
