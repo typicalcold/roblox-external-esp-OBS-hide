@@ -26,23 +26,23 @@ def close_window():
 
 # Create the main window
 root = tk.Tk()
-root.attributes('-fullscreen', True)  # Set fullscreen
+root.attributes('-fullscreen', True)  # Set fullscreen, obv
 
-# Ensure the window is created before trying to get its handle
+# Ensure the window is created before trying to get its handle!
 root.update_idletasks()
 hwnd = ctypes.windll.user32.GetParent(root.winfo_id())
 
-# Set window text (rename window)
-win32gui.SetWindowText(hwnd, "Coldsnow's drawing thing, very pasted, very skidded")
+# Set window texts
+win32gui.SetWindowText(hwnd, "Coldsnow's drawing thing, very pasted!, very skidded!, Not a virus!")
 
-# Make the window topmost
+# Make the window topmost (as yopu can see)
 root.attributes('-topmost', True)
 
-# Create a canvas for drawing
+# Create a canvas for drawing/rendering lines
 canvas = tk.Canvas(root, bg='white', highlightthickness=0, bd=4)
 canvas.pack(fill=tk.BOTH, expand=True)
 
-# Function to draw a line
+# Function to draw a line!
 def draw_line(x1, y1, x2, y2, color):
     return canvas.create_line(x1, y1, x2, y2, fill=color)
 
@@ -52,7 +52,7 @@ def create_stroked_text(x, y, text, stroke_color, fill_color, stroke_width=1, fo
     text_objects = []
     for dx in range(-stroke_width, stroke_width + 1, stroke_width):
         for dy in range(-stroke_width, stroke_width + 1, stroke_width):
-            if dx != 0 or dy != 0:  # Skip the center to avoid duplicate
+            if dx != 0 or dy != 0:  # Skip the center to avoid duplicate, saves little performance.
                 text_objects.append(canvas.create_text(x + dx, y + dy, text=text, font=text_font, fill=stroke_color))
     text_objects.append(canvas.create_text(x, y, text=text, font=text_font, fill=fill_color))
     return text_objects
@@ -77,11 +77,11 @@ def load_json_data():
             with data_lock:
                 global data
                 data = new_data
-            time.sleep(0.0001)  # Wait for 10 milliseconds before retrying
+            time.sleep(0.0001)  
 
         except json.JSONDecodeError:
             print("json error")
-            time.sleep(0.01)  # Wait for 10 milliseconds before retrying
+            time.sleep(0.01)  
 
 # Start the JSON loading in a separate thread
 threading.Thread(target=load_json_data, daemon=True).start()
@@ -142,11 +142,11 @@ texts = []
 def update_canvas():
     with data_lock:
         current_data = list(data)
-    # Clear previous lines and texts
+    # Clear previous lines and texts, to draw new ones next frame
 
     canvas.delete("all")
 
-    # Draw new lines and texts
+    # Draw new lines and texts for every item in the json file
     for entry in current_data:
         x_value = entry["X"]
         y_value = entry["Y"]
@@ -156,12 +156,12 @@ def update_canvas():
         create_stroked_text(x_value, y_value - 50, text=username, stroke_color='#fcfcfb', fill_color='black')
 
 
-# Function to update canvas periodically
+# Function to update canvas looped
 def update_periodically():
     update_canvas()
-    root.after(4, update_periodically)  # Update approximately 60 times per second
+    root.after(4, update_periodically)  # Update approximately 60 times per second (i think)
 
-# Start updating canvas periodically
+# Start updating canvas in a loop
 update_periodically()
 
 # Run the drawing
