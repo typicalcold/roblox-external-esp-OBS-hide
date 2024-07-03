@@ -1,4 +1,3 @@
-# roblox-external-esp
 
 # Table of Contents
 
