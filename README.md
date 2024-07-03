@@ -19,8 +19,9 @@ renders tracers, the opponent(s) name, and a line to the position.
 1. Windows 10/11
 2. The newest version of Python
 3. any executor with a file system
-4. Run "pip install tkinter" into cmd. more about tkinter (https://docs.python.org/id/3.12/library/tkinter.html)
-5. Decent cpu. This script may be cpu intensive and very unoptimized.
+4. Run "pip install tk" into cmd. more about tkinter (https://docs.python.org/id/3.12/library/tkinter.html)
+5. Run "pip install pywin32" into cmd. more about pywin32 (https://github.com/mhammond/pywin32)
+6. Decent cpu. This script may be cpu intensive and very unoptimized.
 
 # installation
 1. download  zip
