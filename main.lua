@@ -40,8 +40,8 @@ while true do
     end
     cached = cached .. "]"
     
-    --writefile(path, cached)
-    task.spawn(writefile, path, cached)
+    writefile(path, cached)
+    --task.spawn(writefile, path, HttpService:JSONEncode(Targets)) --task.spawn is buggy
     task.wait() 
 end
 
