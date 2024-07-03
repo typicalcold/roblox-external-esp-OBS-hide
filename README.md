@@ -40,6 +40,7 @@ renders tracers, the opponent(s) name, and a line to the position.
 2. Run the lua script.
 3. enjoy
 
+#support me
 join my discord server: [discord.gg/pm5Fj6tjv2](https://discord.com/invite/pm5Fj6tjv2)
 rep me on V3rmillion: (https://v3rm.net/members/randoperson0.5755/) (optional)
 rep me on WeAreDevs: (https://forum.wearedevs.net/profile?uid=93002) (optional)
