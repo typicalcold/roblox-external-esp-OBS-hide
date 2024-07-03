@@ -1,58 +1,48 @@
+print("finding")
 local TargetPartName = "Head"
 local DrawTeammates = true
-local FindHumanoids = false -- TODO
+local FindHumanoids = false
 local path = "drawingdata/data.json"
-
-local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
-local HttpService = game:GetService("HttpService")
-
--- Some executors can run before replicatedfirst, so that needs to be accounted for.
-local LocalPlayer = Players.LocalPlayer or Players:GetPropertyChangedSignal("LocalPlayer"):Wait() 
-local Camera = workspace.CurrentCamera or workspace:GetPropertyChangedSignal("CurrentCamera"):Wait()
-
--- CurrentCamera can change
-workspace:GetPropertyChangedSignal("CurrentCamera"):Connect(function(NewCamera)
-    Camera = NewCamera
-end)
-
-local Targets = {}
+local Camera = workspace.CurrentCamera
 
 while true do
-    if not Camera then
-        continue
-    end
-
-    table.clear(Targets)
-
-    for i, Player in Players:GetPlayers() do
-        if i == 1 then -- LocalPlayer is always idx 1
+    local Targets = {}
+    for _, Player in pairs(game.Players:GetPlayers()) do
+        if Player == game.Players.LocalPlayer then
             continue
         end
-
-        local Team = Player.Team
+        local IsTeammate = game.Players.LocalPlayer.Team and Player.Team == game.Players.LocalPlayer.Team
+        if not DrawTeammates and IsTeammate then
+            continue
+        end
         local Character = Player.Character
-        local Part = Character and Character:FindFirstChild(TargetPartName) -- If character is nil, Part is nil. Prevents errors 
-
-        if (not Part) or (Team == LocalPlayer.Team and not DrawTeammates) then
-           continue 
+        if not Character then
+            continue
         end
-
-        local Position, OnScreen = Camera:WorldToViewportPoint(Part.Position)
-
+        local TargetPart = Character:FindFirstChild(TargetPartName)
+        if not TargetPart then
+            continue
+        end
+        local ScreenPoint, OnScreen = Camera:WorldToScreenPoint(TargetPart.Position)
         if OnScreen then
-            table.insert(Targets, {
-                X = Position.X,
-                Y = Position.Y,
-                name = Player.Name,
-                Distance = (Camera.CFrame.Position - Position).Magnitude
-            })
+            table.insert(Targets, {Vector2.new(ScreenPoint.X, ScreenPoint.Y), tostring(TargetPart.Parent.Name)})
         end
     end
 
-    if #Targets > 0 then
-        task.spawn(writefile, path, HttpService:JSONEncode(Targets))
+    local cached = "["
+    local first = true
+    for _, Target in pairs(Targets) do
+        if not first then
+            cached = cached .. ","
+        end
+        cached = cached .. '{"X":' .. tostring(Target[1].X) .. ', "Y":' .. tostring(Target[1].Y) .. ', "name":"' .. Target[2] .. '", "Distance": 10}'
+        first = false
     end
+    cached = cached .. "]"
     
-    RunService.Heartbeat:Wait()
+    --writefile(path, cached)
+    task.spawn(writefile, path, cached)
+    task.wait() 
 end
+
+warn("Exited") -- This line will only execute if the script exits the while loop, not normally during execution
