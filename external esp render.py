@@ -1,4 +1,4 @@
-#pip install tkinter
+#pip install tkinter pywin32
 #Why use tkinter over pygame? pygame lags roblox while its running. tkinter lags when many things are drawn.
 import tkinter as tk
 import win32gui
@@ -141,10 +141,13 @@ texts = []
 # Function to update canvas
 def update_canvas():
     with data_lock:
-        current_data = list(data)
+        current_data = data
     # Clear previous lines and texts, to draw new ones next frame
 
     canvas.delete("all")
+    
+    if len(current_data) == 0:
+        pass
 
     # Draw new lines and texts for every item in the json file
     for entry in current_data:
