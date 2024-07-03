@@ -16,10 +16,11 @@ renders tracers, the opponent(s) name, and a line to the position.
 4. The Python script uses Tkinter to render everything.
 
 # requirments
-1. The newest version of Python
-2. any executor with a file system
-3. Run "pip install tkinter" into cmd.
-4. Decent cpu. This script may be cpu intensive and very unoptimized.
+1. Windows 10/11
+2. The newest version of Python
+3. any executor with a file system
+4. Run "pip install tkinter" into cmd.
+5. Decent cpu. This script may be cpu intensive and very unoptimized.
 
 # installation
 1. download  zip
