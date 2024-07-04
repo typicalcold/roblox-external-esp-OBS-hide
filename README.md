@@ -30,7 +30,7 @@ renders tracers, the opponent(s) name, and a line to the position.
 
 # usage instructions
 1. Open "external esp render.py" in the workspace of the executor
-2. Run the lua script.
+2. Run the lua script in executor
 3. enjoy
 
 #support me
