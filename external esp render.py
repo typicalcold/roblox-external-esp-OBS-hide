@@ -1,5 +1,3 @@
-#pip install tkinter pywin32
-#Why use tkinter over pygame? pygame lags roblox while its running. tkinter lags when many things are drawn.
 import tkinter as tk
 import win32gui
 import win32con
@@ -135,8 +133,7 @@ print(f"Final Width: {renderoffsetX}, Final Height: {renderoffsetY}")
 
 #root.winfo_screenheight()-renderoffsetY
 
-lines = []
-texts = []
+
 
 # Function to update canvas
 def update_canvas():
@@ -150,19 +147,20 @@ def update_canvas():
         pass
 
     # Draw new lines and texts for every item in the json file
-    for entry in current_data:
+    for entry in current_data: # for every peice of data within the json file
         x_value = entry["X"]
         y_value = entry["Y"]
         username = entry["name"]
+        distance = entry["Distance"] #capitilzied D for no reasionn!
         print(f'{username} moved to (X:{x_value}, Y: {y_value})')
         draw_line(root.winfo_screenwidth() / 2,0, x_value, y_value+((root.winfo_screenheight()-renderoffsetY)/2), "blue")
-        create_stroked_text(x_value, y_value - 50, text=username, stroke_color='#fcfcfb', fill_color='black')
+        create_stroked_text(x_value, y_value - 50, text=f"{username}  {round(distance)}", stroke_color='#fcfcfb', fill_color='black')
 
 
 # Function to update canvas looped
 def update_periodically():
     update_canvas()
-    root.after(4, update_periodically)  # Update approximately 60 times per second (i think)
+    root.after(1, update_periodically)  # Update approximately 60 times per second (i think)
 
 # Start updating canvas in a loop
 update_periodically()
