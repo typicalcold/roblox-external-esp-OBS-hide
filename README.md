@@ -29,8 +29,8 @@ renders tracers, the opponent(s) name, and a line to the position.
 3. Drag all unzipped files and folders into the workspace of the executor.
 
 # usage instructions
-1. Open "external esp render.py" in the workspace of the executor
-2. Run the lua script in executor
+1. Open "external esp render.py" in the workspace of the executor (doesnt matter if you open before or after opening roblox)
+2. Copy everything in the lua script, paste into any exec (thats decent), and run
 3. enjoy
 
 #support me
