@@ -21,7 +21,13 @@ renders tracers, the opponent(s) name, and a line to the position.
 3. any executor with a file system
 4. Run "pip install tk" into cmd. more about tkinter (https://docs.python.org/id/3.12/library/tkinter.html)
 5. Run "pip install pywin32" into cmd. more about pywin32 (https://github.com/mhammond/pywin32)
-6. Decent cpu. This script may be cpu intensive and very unoptimized.
+6. Run "pip install dearpygui" into cmd. more about dearpygui (https://github.com/hoffstadt/DearPyGui)
+7. Download Pymeow zip (https://github.com/qb-0/pyMeow)
+8. rename the zip file to pyMeow (dont remove .zip)
+9. right click where the zip file is located ( not the file itself)
+10. open cmd or power shell in right click menu
+11. Run pip install pyMeow.zip
+12. Decent gpu. This script may be gpu intensive and very unoptimized.
 
 # installation
 1. download  zip
