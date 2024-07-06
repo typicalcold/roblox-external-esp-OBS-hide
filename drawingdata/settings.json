@@ -1,0 +1,16 @@
+{
+    "Enable_render": true,
+    "Render_teammates": true,
+    "Enable_tracers": true,
+    "Enable_names": true,
+    "Tracer_line_thickness": 1.0,
+    "Tracer_line_color": [
+        254.99607849121094,
+        254.99607849121094,
+        255.0,
+        255.0
+    ],
+    "Enable_compatibility": false,
+    "Enable_distance": true,
+    "Tracer_line_offset": 0.0
+}
