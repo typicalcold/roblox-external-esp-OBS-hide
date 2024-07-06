@@ -1,94 +1,191 @@
-import tkinter as tk
-import win32gui
-import win32con
-import ctypes
-from tkinter import font
-import threading
-import time
+from pyMeow import *
 import os
 import json
-print("starting external esp")
+import time
+from win32api import GetSystemMetrics
+import random
+import string
+import tkinter as tk
+import threading
+
+print("Width =", GetSystemMetrics(0))
+print("Height =", GetSystemMetrics(1))
+
+
+def EXTERNALUI():
+    import dearpygui.dearpygui as dpg
+    import ctypes
+    import random
+    import string
+    import os
+    import json
+
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    json_file_path = os.path.join(current_dir, "drawingdata", "settings.json")
+
+    def generate_random_string(length=10):
+        characters = string.ascii_letters + string.digits + string.punctuation
+        random_string = ''.join(random.choice(characters) for _ in range(length))
+        return random_string
+
+    def windows_popup(title, message):
+        ctypes.windll.user32.MessageBoxW(0, message, title, 0x40 | 0x1)
+
+    width = 700
+    height = 700
+    drag_zone_height = 5
+    title_bar_drag = False
+
+    def exit():
+        dpg.destroy_context()
+
+    dpg.create_context()
+    viewport = dpg.create_viewport(title=generate_random_string(15), width=width, height=height, decorated=True, resizable=False, always_on_top=True)
+    dpg.setup_dearpygui()
+
+    id_to_name = {}
+    defaultsettingsDONOTCHANGE = {
+        "Enable_render": True,
+        "Render_teammates": False,
+        "Enable_tracers": True,
+        "Enable_names": True,
+        "Tracer_line_thickness": 1.0,
+        "Tracer_line_color": [255.0, 0.0, 0.0, 255.0],
+        "Enable_compatibility": False,
+        "Enable_distance": True,
+        "Tracer_line_offset": 0
+    }
+
+    def load_settings():
+
+        with open(json_file_path, 'r') as f:
+            return json.load(f)
+
+
+    def save_settings():
+        while True:
+            time.sleep(.05)
+            with open(json_file_path, 'w') as f:
+                json.dump(settings, f, indent=4)
+    threading.Thread(target=save_settings).start()
+    global settings
+    settings = load_settings()
+    
+    id_to_name = {}
+
+    def button_callback(sender):
+
+        print(f"Button clicked! Sender: {id_to_name[sender]}")
+        if id_to_name[sender] == "Revert_all_changes": #NOT WORKING
+            settings = defaultsettingsDONOTCHANGE.copy()
+
+
+            for item_id, item_name in id_to_name.items():
+                if item_name in defaultsettingsDONOTCHANGE:
+                    value = defaultsettingsDONOTCHANGE[item_name]
+                    dpg.set_value(item_id, value)
+                    print(f"Reverted {item_name} to {value}")
+                    
+
+        else:
+            settings[id_to_name[sender]] = True
+
+
+    def checkbox_callback(sender):
+        value = dpg.get_value(sender)
+        print(f"Checkbox value: {value}, Sender: {id_to_name[sender]}")
+        settings[id_to_name[sender]] = value
+
+
+    def slider_callback(sender):
+        value = dpg.get_value(sender)
+        print(f"Slider value: {value}, Sender: {id_to_name[sender]}")
+        settings[id_to_name[sender]] = value
+
+
+    def color_picker_callback(sender):
+        color = dpg.get_value(sender)
+        print(f"Selected color: {color}, Sender: {id_to_name[sender]}")
+        settings[id_to_name[sender]] = color
+
+
+    with dpg.window(label="coldsnow external rendering settings", width=700, height=700, no_collapse=True, no_move=True, no_resize=True) as win:
+        with dpg.tab_bar():
+            with dpg.tab(label="Main"):
+                dpg.add_text("Hello, World!")
+                #btn_id = dpg.add_button(label="Revert all changes", callback=button_callback)
+                #id_to_name[btn_id] = "Revert_all_changes"
+
+                chk_id = dpg.add_checkbox(label="Compatibility mode (only enable if you encounter freezing issues)", callback=checkbox_callback)
+                dpg.set_value(chk_id, settings.get("Enable_compatibility", False))
+                id_to_name[chk_id] = "Enable_compatibility"
+
+                chk_id = dpg.add_checkbox(label="Render", callback=checkbox_callback)
+                dpg.set_value(chk_id, settings.get("Enable_render", True))
+                id_to_name[chk_id] = "Enable_render"
+
+                chk_id = dpg.add_checkbox(label="Render teammates", callback=checkbox_callback)
+                dpg.set_value(chk_id, settings.get("Render_teammates", False))
+                id_to_name[chk_id] = "Render_teammates"
+
+                chk_id = dpg.add_checkbox(label="Enable names", callback=checkbox_callback)
+                dpg.set_value(chk_id, settings.get("Enable_names", True))
+                id_to_name[chk_id] = "Enable_names"
+
+                chk_id = dpg.add_checkbox(label="Enable distance", callback=checkbox_callback)
+                dpg.set_value(chk_id, settings.get("Enable_distance", True))
+                id_to_name[chk_id] = "Enable_distance"
+            
+                chk_id = dpg.add_checkbox(label="Enable tracers", callback=checkbox_callback)
+                dpg.set_value(chk_id, settings.get("Enable_tracers", True))
+                id_to_name[chk_id] = "Enable_tracers"
+
+                sld_id = dpg.add_slider_float(label="Tracer line Y axis offset", default_value=settings.get("Tracer_line_offset", 0), min_value=-70, max_value=70.0, format="%.0f", callback=slider_callback)
+                id_to_name[sld_id] = "Tracer_line_offset"
+
+                sld_id = dpg.add_slider_float(label="Tracer line thickness", default_value=settings.get("Tracer_line_thickness", 2), max_value=5.0, format="%.0f", callback=slider_callback)
+                id_to_name[sld_id] = "Tracer_line_thickness"
+                
+                clr_id = dpg.add_color_picker(label="Tracer line color", default_value=settings.get("Tracer_line_color", [255, 0, 0, 255]), callback=color_picker_callback, height=155, width=155)
+                id_to_name[clr_id] = "Tracer_line_color"
+
+    def cal_dow(sender, data):
+        global title_bar_drag
+        if dpg.is_mouse_button_down(0):
+            if dpg.get_mouse_pos()[1] <= drag_zone_height:
+                pass
+        else:
+            title_bar_drag = False
+
+    def cal(sender, data):
+        global title_bar_drag
+        if title_bar_drag:
+            pos = dpg.get_viewport_pos()
+            x = data[1]
+            y = data[2]
+            final_x = pos[0] + x
+            final_y = pos[1] + y
+            dpg.configure_viewport(viewport, x_pos=final_x, y_pos=final_y)
+
+    with dpg.handler_registry():
+        dpg.add_mouse_drag_handler(0, callback=cal)
+        dpg.add_mouse_move_handler(callback=cal_dow)
+
+    dpg.show_viewport()
+    dpg.start_dearpygui()
+    dpg.destroy_context()
+#end of external ui
+threading.Thread(target=EXTERNALUI).start()
+
 
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
-
-# Function to make the window transparent and click-through
-def make_window_transparent_and_clickthrough(hwnd):
-    styles = win32gui.GetWindowLong(hwnd, win32con.GWL_EXSTYLE)
-    win32gui.SetWindowLong(hwnd, win32con.GWL_EXSTYLE, styles | win32con.WS_EX_LAYERED | win32con.WS_EX_TRANSPARENT)
-    win32gui.SetLayeredWindowAttributes(hwnd, 0x00ffffff, 0, win32con.LWA_COLORKEY)
-
-# Function to handle closing the window
-def close_window():
-    root.destroy()
-
-# Create the main window
-root = tk.Tk()
-root.attributes('-fullscreen', True)  # Set fullscreen, obv
-
-# Ensure the window is created before trying to get its handle!
-root.update_idletasks()
-hwnd = ctypes.windll.user32.GetParent(root.winfo_id())
-
-# Set window texts
-win32gui.SetWindowText(hwnd, "Coldsnow's drawing thing, very pasted!, very skidded!, Not a virus!")
-
-# Make the window topmost (as yopu can see)
-root.attributes('-topmost', True)
-
-# Create a canvas for drawing/rendering lines
-canvas = tk.Canvas(root, bg='white', highlightthickness=0, bd=4)
-canvas.pack(fill=tk.BOTH, expand=True)
-
-# Function to draw a line!
-def draw_line(x1, y1, x2, y2, color):
-    return canvas.create_line(x1, y1, x2, y2, fill=color)
-
-# Function to draw stroked text
-def create_stroked_text(x, y, text, stroke_color, fill_color, stroke_width=1, font_size=10):
-    text_font = font.Font(family="Helvetica", size=font_size, weight="bold")
-    text_objects = []
-    for dx in range(-stroke_width, stroke_width + 1, stroke_width):
-        for dy in range(-stroke_width, stroke_width + 1, stroke_width):
-            if dx != 0 or dy != 0:  # Skip the center to avoid duplicate, saves little performance.
-                text_objects.append(canvas.create_text(x + dx, y + dy, text=text, font=text_font, fill=stroke_color))
-    text_objects.append(canvas.create_text(x, y, text=text, font=text_font, fill=fill_color))
-    return text_objects
-
-# Make the window transparent and click-through
-make_window_transparent_and_clickthrough(hwnd)
-
-# Bind closing event to the window
-root.protocol("WM_DELETE_WINDOW", close_window)
-
 json_file_path = os.path.join(current_dir, "drawingdata", "data.json")
-
-data_lock = threading.Lock()
-data = []
-
-# Function to load JSON data from file with retries until successful
-def load_json_data():
-    while True:
-        try:
-            with open(json_file_path, 'r') as file:
-                new_data = json.load(file)
-            with data_lock:
-                global data
-                data = new_data
-            time.sleep(0.0001)  
-
-        except json.JSONDecodeError:
-            print("json error")
-            time.sleep(0.01)  
-
-# Start the JSON loading in a separate thread
-threading.Thread(target=load_json_data, daemon=True).start()
-
-
-# Global variables to store window size
-renderoffsetX = 0
-renderoffsetY = 0
-
+settings_file_path = os.path.join(current_dir, "drawingdata", "settings.json")
+screenx = GetSystemMetrics(0) #https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getsystemmetrics
+screeny = GetSystemMetrics(1)
+print(screenx)
+# Initialize overlay
 def run_calibrating():
     global renderoffsetX, renderoffsetY
     
@@ -120,50 +217,75 @@ def run_calibrating():
 
     # Run the main loop
     root2.mainloop()
+run_calibrating()
+def generate_random_string(length=10):
+    # Define the characters to choose from: letters, digits, and punctuation
+    characters = string.ascii_letters + string.digits + string.punctuation
+    # Randomly select characters from the defined set
+    random_string = ''.join(random.choice(characters) for _ in range(length))
+    return f"{random_string}"
 
-# Create a new thread to run the tkinter main loop
-calibratingthread = threading.Thread(target=run_calibrating)
-calibratingthread.start()
+overlay_init("Full",1000000,generate_random_string(length=10))
+tracercolor = new_color(255, 0, 0, 255)
+textcolor = new_color(0, 0, 0, 255)
+textstrokecolor = new_color(255, 255, 255, 255)
 
-# Wait for the calibratingthread to finish
-calibratingthread.join()
-
-# Now print the final window size after it has been maximized
-print(f"Final Width: {renderoffsetX}, Final Height: {renderoffsetY}")
-
-#root.winfo_screenheight()-renderoffsetY
-
-
-
-# Function to update canvas
-def update_canvas():
-    with data_lock:
-        current_data = data
-    # Clear previous lines and texts, to draw new ones next frame
-
-    canvas.delete("all")
-    
-    if len(current_data) == 0:
-        pass
-
-    # Draw new lines and texts for every item in the json file
-    for entry in current_data: # for every peice of data within the json file
-        x_value = entry["X"]
-        y_value = entry["Y"]
-        username = entry["name"]
-        distance = entry["Distance"] #capitilzied D for no reasionn!
-        print(f'{username} moved to (X:{x_value}, Y: {y_value})')
-        draw_line(root.winfo_screenwidth() / 2,0, x_value, y_value+((root.winfo_screenheight()-renderoffsetY)/2), "blue")
-        create_stroked_text(x_value, y_value - 50, text=f"{username}  {round(distance)}", stroke_color='#fcfcfb', fill_color='black')
+def create_stroked_text(text,x, y, font_size, fill_color, stroke_width=1):
+    if text == "  ":
+        none1 = 0
+    else:
+        
+        for dx in range(-stroke_width, stroke_width + 1, stroke_width):
+            for dy in range(-stroke_width, stroke_width + 1, stroke_width):
+                if dx != 0 or dy != 0:  # Skip the center to avoid duplicate, saves little performance.
+                    draw_text(text,x+dx,y+dy-30,font_size,textstrokecolor)
+        draw_text(text,x,y-30,font_size,textcolor)
 
 
-# Function to update canvas looped
-def update_periodically():
-    update_canvas()
-    root.after(1, update_periodically)  # Update approximately 60 times per second (i think)
+offset = -10
 
-# Start updating canvas in a loop
-update_periodically()
+while overlay_loop():
+    draw_fps(screenx-100,0+50)
+    try:
+        # Read JSON data from file
+        with open(json_file_path, 'r') as f:
+            jsondata = json.load(f)
 
-# Run the drawing
-root.mainloop()
+        with open(settings_file_path, 'r') as f:
+            settingdata = json.load(f)
+        
+        if settingdata["Enable_render"] == True:
+            # Begin drawing
+            begin_drawing()
+
+            # Draw the line based on JSON data
+            for data in jsondata:
+                startPosX = data["X"]
+                startPosY = data["Y"]
+                endPosX = data["X"]
+                endPosY = data["Y"]
+                if settingdata["Enable_names"]:
+                    name = data["name"]
+                else:
+                    name=""
+                if settingdata["Enable_distance"]:
+                    distance = data["Distance"]
+                else:
+                    distance=""
+
+                #name
+                print(settingdata["Tracer_line_color"][1])
+                print(tracercolor)
+                create_stroked_text(f"{name}  {distance}",endPosX,endPosY-20,10,textcolor)
+                draw_line(screenx/2, 0, endPosX, endPosY+((screeny-renderoffsetY)/2)-offset-settingdata["Tracer_line_offset"], new_color(round(settingdata["Tracer_line_color"][0]),round(settingdata["Tracer_line_color"][1]),round(settingdata["Tracer_line_color"][2]),round(settingdata["Tracer_line_color"][3])),settingdata["Tracer_line_thickness"])
+
+            # End drawing
+            end_drawing()
+        else:
+            end_drawing()
+    except json.JSONDecodeError as e:
+        # Handle the error (e.g., wait for the file to be readable again)
+        time.sleep(.001)  # Wait for 1 second before retrying
+
+# Close overlay
+overlay_close()
