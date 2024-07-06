@@ -16,8 +16,18 @@ workspace:GetPropertyChangedSignal("CurrentCamera"):Connect(function(NewCamera)
     Camera = NewCamera
 end)
 
+local HttpService = game:GetService("HttpService")
+
+local function GetCorners(Part)
+    local CF, Size, Corners = Part.CFrame, Part.Size / 2, {};
+    for X = -1, 1, 2 do for Y = -1, 1, 2 do for Z = -1, 1, 2 do
+        Corners[#Corners+1] = (CF * CFrame.new(Size * Vector3.new(X, Y, Z))).Position;      
+    end; end; end;
+    return Corners;
+end
 
 while true do
+
     local Targets = {}
     for _, Player in pairs(game.Players:GetPlayers()) do
         if Player == game.Players.LocalPlayer then
@@ -48,7 +58,7 @@ while true do
         if not first then
             cached = cached .. ","
         end
-        cached = cached .. '{"X":' .. tostring(Target[1].X) .. ', "Y":' .. tostring(Target[1].Y) .. ', "name":"' .. Target[2] .. '", "Distance": '..Target[3]..'}'
+        cached = cached .. '{"X":' .. tostring(Target[1].X) .. ', "Y":' .. tostring(Target[1].Y) .. ', "name":"' .. Target[2] .. '", "Distance": '..math.round(Target[3])..'}'
         first = false
     end
     cached = cached .. "]"
