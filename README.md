@@ -19,20 +19,13 @@ renders tracers, the opponent(s) name, and a line to the position.
 1. Windows 10/11
 2. The newest version of Python
 3. any executor with a file system
-4. Run "pip install tk" into cmd. more about tkinter (https://docs.python.org/id/3.12/library/tkinter.html)
-5. Run "pip install pywin32" into cmd. more about pywin32 (https://github.com/mhammond/pywin32)
-6. Run "pip install dearpygui" into cmd. more about dearpygui (https://github.com/hoffstadt/DearPyGui)
-7. Download Pymeow zip (https://github.com/qb-0/pyMeow)
-8. rename the zip file to pyMeow (dont remove .zip)
-9. right click where the zip file is located ( not the file itself)
-10. open cmd/powershell/Terminal in right click menu
-11. Run "pip install pyMeow.zip"
-12. Decent gpu. This script may be gpu intensive and very unoptimized.
+4. Decent gpu. This script may be gpu intensive and very unoptimized.
 
 # installation
-1. download  zip
+1. download zip
 2. unzip
 3. Drag all unzipped files and folders into the workspace of the executor.
+4. run the "install.bat", this will install the libraries that is required to work.
 
 # usage instructions
 1. Copy everything in the lua script, paste into any exec (thats decent), and run
