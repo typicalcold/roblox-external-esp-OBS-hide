@@ -13,7 +13,7 @@ renders tracers, the opponent(s) name, and a line to the position.
 1. The lua script checks for all players on screen, then uses WorldToScreenPoint() to convert the 3D position to the position onscreen.
 2. The lua script stores the data into a JSON script.
 3. The Python script iterates through the JSON data.
-4. The Python script uses Tkinter to render everything.
+4. The Python script uses pyMeow to render esp, and dearpygui to make the ui.
 
 # requirments
 1. Windows 10/11
