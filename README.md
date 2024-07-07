@@ -26,7 +26,7 @@ renders tracers, the opponent(s) name, and a line to the position.
 8. rename the zip file to pyMeow (dont remove .zip)
 9. right click where the zip file is located ( not the file itself)
 10. open cmd/powershell/Terminal in right click menu
-11. Run pip install pyMeow.zip
+11. Run "pip install pyMeow.zip"
 12. Decent gpu. This script may be gpu intensive and very unoptimized.
 
 # installation
